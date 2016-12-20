@@ -163,10 +163,6 @@
           <groupId>junit</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>mockito-core</artifactId>
-          <groupId>org.mockito</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>objenesis</artifactId>
           <groupId>org.objenesis</groupId>
         </exclusion>
@@ -240,6 +236,11 @@
         <version>1.11.22</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongo-java-driver</artifactId>
+        <version>2.12.3</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

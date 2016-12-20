@@ -95,6 +95,13 @@ public class UserTest {
         assertThat(updatedUser.getUserName()).isEqualTo(user.getUserName());
         assertThat(updatedUser.getRoles()).isEqualTo(user.getRoles());
 
+        // Now do a fresh read from the DB to validate the updates.
+
+        updatedUser = fetchUser(user.getId());
+
+        assertThat(updatedUser.getUserName()).isEqualTo(user.getUserName());
+        assertThat(updatedUser.getRoles()).isEqualTo(user.getRoles());
+
         String missingUser = user.getId() + "-foo";
 
         int stat = client.target("http://localhost:" + RULE.getLocalPort() + "/user/" + missingUser)

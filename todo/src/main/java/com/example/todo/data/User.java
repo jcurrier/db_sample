@@ -54,6 +54,9 @@ public class User implements Principal {
         return this.m_userId;
     }
 
+    @JsonIgnore
+    public String get_id() { return this.m_userId; }
+
     @JsonProperty("UserRoles")
     public List<String> getRoles() {
         return m_roles;

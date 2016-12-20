@@ -9,11 +9,15 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
 import com.amazonaws.services.securitytoken.model.AssumeRoleRequest;
 import com.amazonaws.services.securitytoken.model.AssumeRoleResult;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 
 /**
  * Created by Jeff on 12/6/16.
  */
 public class ClientHelper {
+    private final String MONGO_CONN_URI =
+            "mongodb://jcurrier:goodfoot@ds139968-a0.mlab.com:39968,ds139968-a1.mlab.com:39968/sample_db?replicaSet=rs-ds139968";
     private static final String ROLE_ARN =
             "arn:aws:iam::099090753569:role/todo_svc_role";
     private static AWSCredentials m_creds = null;
@@ -32,6 +36,12 @@ public class ClientHelper {
         return m_instance;
     }
 
+    public MongoClient getMongoClient() {
+        MongoClientURI uri = new MongoClientURI(MONGO_CONN_URI);
+        MongoClient client = new MongoClient(uri);
+
+        return client;
+    }
 
     public AmazonDynamoDBClient getDynamoClient() {
 

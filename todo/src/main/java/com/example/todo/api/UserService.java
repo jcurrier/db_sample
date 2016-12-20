@@ -7,6 +7,7 @@ import com.example.todo.exceptions.ServiceException;
 import com.example.todo.providers.UserServiceProvider;
 import com.example.todo.providers.dynamo.DynamoUserServiceProvider;
 import com.example.todo.providers.memory.MemUserServiceProvider;
+import com.example.todo.providers.mongo.MongoUserServiceProvider;
 
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
@@ -68,6 +69,10 @@ public class UserService {
             }
             case "dynamo": {
                 m_svcProvider = new DynamoUserServiceProvider();
+                break;
+            }
+            case "mongo": {
+                m_svcProvider = new MongoUserServiceProvider();
                 break;
             }
             default: {

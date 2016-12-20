@@ -8,6 +8,7 @@ import com.example.todo.exceptions.ServiceException;
 import com.example.todo.providers.TaskServiceProvider;
 import com.example.todo.providers.dynamo.DynamoTasksServiceProvider;
 import com.example.todo.providers.memory.MemTaskServiceProvider;
+import com.example.todo.providers.mongo.MongoTasksServiceProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,10 @@ public class TaskService {
             }
             case "dynamo": {
                 m_svcProvider = new DynamoTasksServiceProvider();
+                break;
+            }
+            case "mongo": {
+                m_svcProvider = new MongoTasksServiceProvider();
                 break;
             }
             default: {

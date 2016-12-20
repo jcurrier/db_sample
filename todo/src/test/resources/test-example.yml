@@ -1,4 +1,4 @@
-store: dynamo
+store: mongo
 
 server:
   applicationConnectors:

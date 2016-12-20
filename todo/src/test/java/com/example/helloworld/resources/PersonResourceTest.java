@@ -13,15 +13,17 @@ import javax.ws.rs.core.Response;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+/*
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
+*/
 /**
  * Unit tests for {@link PersonResource}.
  */
 public class PersonResourceTest {
+    /*
     private static final PersonDAO DAO = mock(PersonDAO.class);
     @ClassRule
     public static final ResourceTestRule RULE = ResourceTestRule.builder()
@@ -41,7 +43,6 @@ public class PersonResourceTest {
         reset(DAO);
     }
 
-    /*
     @Test
     public void getPersonSuccess() {
         when(DAO.findById(1L)).thenReturn(Optional.of(person));
