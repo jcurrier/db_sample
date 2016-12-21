@@ -103,7 +103,7 @@ public class MongoUserServiceProvider implements UserServiceProvider {
         try {
             MongoCollection<Document> userCollection = m_db.getCollection(COLLECTION_NAME);
 
-            Document result = userCollection.findOneAndReplace(eq("_id", user.getId()), new Document(updatedUser));
+            Document result = userCollection.findOneAndReplace(eq("UserId", user.getId()), new Document(updatedUser));
             if(result != null) {
                 itemFound = true;
             } else {

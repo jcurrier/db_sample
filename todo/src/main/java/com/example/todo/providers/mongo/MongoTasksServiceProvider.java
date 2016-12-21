@@ -7,36 +7,157 @@ import com.example.todo.data.User;
 import com.example.todo.exceptions.NotFoundException;
 import com.example.todo.exceptions.ServiceException;
 import com.example.todo.providers.TaskServiceProvider;
+import com.example.todo.util.ClientHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
+
+import static com.mongodb.client.model.Filters.eq;
 
 /**
  * Created by Jeff on 12/19/16.
  */
 public class MongoTasksServiceProvider implements TaskServiceProvider {
+    private final String DB_NAME="sample_db";
+    private final String COLLECTION_NAME = "Tasks";
+    private MongoClient m_client = null;
+    private MongoDatabase m_db = null;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MongoTasksServiceProvider.class);
+
+    public MongoTasksServiceProvider() {
+        LOGGER.info("Creating Mongo client");
+
+        try {
+            MongoClient m_client = ClientHelper.instance().getMongoClient();
+            m_db = m_client.getDatabase("sample_db");
+        }catch(Exception ex) {
+            LOGGER.error("Caught exception while attempting to create mongo client", ex);
+        }
+    }
 
     @Override
     public Task createTask(OperationContext ctx, Task newTask) throws ServiceException {
-        return null;
+
+        try {
+            newTask.setCreatedOn(DateTime.now().toString());
+            newTask.setLastUpdated(DateTime.now().toString());
+
+            HashMap<String, Object> taskProps = newTask.toHashMap();
+            Document taskDoc = new Document(taskProps);
+
+            MongoCollection<Document> tasksCollection = m_db.getCollection(COLLECTION_NAME);
+            tasksCollection.insertOne(new Document(taskDoc));
+
+        } catch(Exception ex) {
+            LOGGER.error("Caught exception creating task", ex);
+        }
+
+        return newTask;
     }
 
     @Override
     public void deleteTask(OperationContext ctx, String taskId) throws NotFoundException, ServiceException {
+        boolean itemFound = false;
 
+        LOGGER.info("Attempting to delete task. Task id->{"+taskId+"}");
+
+        try {
+            MongoCollection<Document> tasksCollection = m_db.getCollection(COLLECTION_NAME);
+
+            Document foundTaskDoc = tasksCollection.findOneAndDelete(eq("Id", taskId));
+
+            if(foundTaskDoc != null) {
+                itemFound = true;
+            } else {
+                LOGGER.info("Got back a null user task");
+                itemFound = false;
+            }
+
+        } catch(Exception ex) {
+            LOGGER.error("Caught exception while attempting to delete task", ex);
+        }
+
+        if(!itemFound) {
+            throw new NotFoundException("Task: " + taskId + " not found!");
+        }
     }
 
     @Override
     public Task updateTask(OperationContext ctx, Task taskToUpdate) throws NotFoundException, ServiceException {
-        return null;
+
+        boolean itemFound = false;
+
+        try {
+            //update lastUpate time.
+            taskToUpdate.setLastUpdated(DateTime.now().toString());
+
+            HashMap<String, Object> taskProps = taskToUpdate.toHashMap();
+            Document updatedTask = new Document(taskProps);
+
+            MongoCollection<Document> tasksCollection = m_db.getCollection(COLLECTION_NAME);
+
+            Document result = tasksCollection.findOneAndUpdate(eq("Id", taskToUpdate.getId()),
+                    new Document("$set", updatedTask));
+            if(result != null) {
+                itemFound = true;
+            } else {
+                LOGGER.info("Got back a null task item");
+                itemFound = false;
+            }
+
+        } catch(Exception ex) {
+            LOGGER.error("Caught exception while attempting to update task", ex);
+        }
+
+        if(!itemFound) {
+            throw new NotFoundException("Task: " + taskToUpdate.getId() + " not found!");
+        }
+
+        return taskToUpdate;
     }
 
     @Override
     public Task getTask(OperationContext ctx, String taskId) throws NotFoundException, ServiceException {
-        return null;
+        Task foundTask = null;
+        boolean itemFound = false;
+
+        try {
+            MongoCollection<Document> tasksCollection = m_db.getCollection(COLLECTION_NAME);
+
+            Document foundTaskDoc = tasksCollection.find(eq("Id", taskId)).first();
+
+            if(foundTaskDoc != null) {
+                ObjectMapper mapper = new ObjectMapper();
+                String s = foundTaskDoc.toJson();
+                foundTask = mapper.readValue(s, Task.class);
+                itemFound = true;
+            } else {
+                LOGGER.info("Got back a null task item");
+                itemFound = false;
+            }
+
+        } catch(Exception ex) {
+            LOGGER.error("Caught exception while attempting to find task", ex);
+        }
+
+        if(!itemFound) {
+            throw new NotFoundException("Task: " + taskId + " not found!");
+        }
+
+        return foundTask;
     }
 
     @Override
     public List<Task> getTasks(OperationContext ctx, TaskQueryType queryType) throws NotFoundException, ServiceException {
         return null;
     }
+
 }

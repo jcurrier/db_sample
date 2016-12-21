@@ -70,8 +70,6 @@ public class TasksTest {
         assertThat(stat).isEqualTo(HttpStatus.NOT_FOUND_404);
     }
 
-
-
     @Test
     public void postAndPutTest() {
         Task t = new Task("Create TPS Report", "Create that damn TPS report", DateTime.now(),
@@ -96,6 +94,7 @@ public class TasksTest {
         assertThat(updatedTask.getAssignedUserId()).isEqualTo(newTask.getAssignedUserId());
     }
 
+    /*
     @Test
     public void testGetOwnedTasks() {
 
@@ -195,6 +194,7 @@ public class TasksTest {
         deleteTask(taskTwo);
         deleteTask(taskThree);
     }
+    */
 
     private Task createTask(Task taskToCreate) {
         final Task newTask = client.target("http://localhost:" + RULE.getLocalPort() + "/tasks/")

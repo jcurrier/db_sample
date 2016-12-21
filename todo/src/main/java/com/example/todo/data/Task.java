@@ -1,8 +1,10 @@
 package com.example.todo.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -26,6 +28,9 @@ public class Task {
 
     @JsonProperty("Id")
     public void setId(String id) { this.m_taskId = id; }
+
+    @JsonIgnore
+    public String get_id() { return this.m_taskId; }
 
     @JsonProperty("Title")
     public String getTitle() {
@@ -128,5 +133,22 @@ public class Task {
                 String state, DateTime createdOn, DateTime lastUpdated) {
         this(UUID.randomUUID().toString(), title, description, due, assigneeId, ownerUserId, state, createdOn,
                 lastUpdated);
+    }
+
+    public HashMap<String, Object> toHashMap() {
+        HashMap<String, Object> propMap = new HashMap<>();
+
+        propMap.put("_id", getId());
+        propMap.put("Id", getId());
+        propMap.put("Title", getTitle());
+        propMap.put("Description", getDescription());
+        propMap.put("DueDate", getDueDate());
+        propMap.put("Assignee", getAssignedUserId());
+        propMap.put("TaskOwner", getOwnerId());
+        propMap.put("TaskState", getState());
+        propMap.put("CreatedOn", getCreatedOn());
+        propMap.put("LastUpdated", getLastUpdated());
+
+        return propMap;
     }
 }
