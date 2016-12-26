@@ -43,6 +43,18 @@ public class UserTest {
     }
 
     @Test
+    public void createTestUser() throws Exception {
+        ArrayList<String> userRoles = new ArrayList<String>();
+        userRoles.add("admin");
+        User testUser = new User("test", "test", "super_secret", userRoles);
+        client.target("http://localhost:" + RULE.getLocalPort() + "/user/")
+                .request()
+                .header(TestUtil.BASIC_AUTH_HEADER, TestUtil.BASIC_AUTH_VALUE)
+                .post(Entity.entity(testUser, MediaType.APPLICATION_JSON_TYPE))
+                .readEntity(User.class);
+    }
+
+    @Test
     public void testPostAndGetUser() throws Exception {
         ArrayList<String> userRoles = new ArrayList<String>();
         userRoles.add("admin");

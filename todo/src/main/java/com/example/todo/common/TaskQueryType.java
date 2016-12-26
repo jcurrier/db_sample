@@ -5,5 +5,6 @@ package com.example.todo.common;
  */
 public enum TaskQueryType {
     AssignedTask,
-    OwnedTask
+    OwnedTask,
+    All
 }

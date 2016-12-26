@@ -10,13 +10,17 @@ import com.example.todo.providers.TaskServiceProvider;
 import com.example.todo.util.ClientHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -157,7 +161,40 @@ public class MongoTasksServiceProvider implements TaskServiceProvider {
 
     @Override
     public List<Task> getTasks(OperationContext ctx, TaskQueryType queryType) throws NotFoundException, ServiceException {
-        return null;
+
+        List<Task> tasks = new ArrayList<Task>();
+        try {
+            MongoCollection<Document> tasksCollection = m_db.getCollection(COLLECTION_NAME);
+            HashMap<String, Object> queryVals = new HashMap<>();
+
+            Document queryPredicates;
+            if(queryType == TaskQueryType.OwnedTask) {
+                queryVals.put("TaskOwner", ctx.getSecurityContext().getUserPrincipal().getName());
+                queryPredicates = new Document(queryVals);
+            } else if(queryType == TaskQueryType.AssignedTask) {
+                queryVals.put("Assignee", ctx.getSecurityContext().getUserPrincipal().getName());
+                queryPredicates = new Document(queryVals);
+            } else {
+                // TODO: AND'd queries not yet working.
+                queryVals.put("TaskOwner", ctx.getSecurityContext().getUserPrincipal().getName());
+                queryVals.put("Assignee", ctx.getSecurityContext().getUserPrincipal().getName());
+                queryPredicates = new Document("$and", queryVals);
+            }
+
+            FindIterable result = tasksCollection.find(new Document(queryPredicates));
+            MongoCursor cursor = result.iterator();
+            ObjectMapper mapper = new ObjectMapper();
+            while(cursor.hasNext()) {
+                Document taskDoc = (Document) cursor.next();
+                Task t = mapper.readValue(taskDoc.toJson(), Task.class);
+                tasks.add(t);
+            }
+            cursor.close();
+
+        } catch(Exception ex) {
+            LOGGER.error("Caught exception while attempting to find task", ex);
+        }
+        return tasks;
     }
 
 }

@@ -72,13 +72,11 @@ public class TodoServiceApplication extends Application<TodoServiceConfiguration
         environment.jersey().register(new UserResource(configuration));
 
         String store = configuration.getStore();
-        if(store.equalsIgnoreCase("dynamo")) {
-            environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
-                    .setAuthenticator(new TodoAuthenticator(configuration))
-                    .setAuthorizer(new TodoAuthorizer())
-                    .setRealm("TODO_REALM")
-                    .buildAuthFilter()));
-        }
+        environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
+            .setAuthenticator(new TodoAuthenticator(configuration))
+            .setAuthorizer(new TodoAuthorizer())
+            .setRealm("TODO_REALM")
+            .buildAuthFilter()));
 
         /*
         environment.healthChecks().register("template", new TemplateHealthCheck(template));

@@ -68,10 +68,16 @@ public class TasksResource {
     public Response getTasks(@Context SecurityContext secCtx, @QueryParam("type") String taskQueryType) {
 
         try {
-            TaskQueryType queryType = TaskQueryType.AssignedTask;
+            TaskQueryType queryType = TaskQueryType.All;
 
-            if(taskQueryType.equals(("owned"))) {
-               queryType = TaskQueryType.OwnedTask;
+            if(taskQueryType != null &&
+               taskQueryType.equals("owned")) {
+                queryType = TaskQueryType.OwnedTask;
+            } else if (taskQueryType != null &&
+                    taskQueryType.equals("assigned")) {
+                queryType = TaskQueryType.AssignedTask;
+            } else {
+                queryType = TaskQueryType.All;
             }
 
             List<Task> tasks = m_svc.getTasks(new OperationContext(secCtx), queryType);
