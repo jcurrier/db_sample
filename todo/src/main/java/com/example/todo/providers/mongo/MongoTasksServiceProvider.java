@@ -9,6 +9,7 @@ import com.example.todo.exceptions.ServiceException;
 import com.example.todo.providers.TaskServiceProvider;
 import com.example.todo.util.ClientHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBList;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -175,10 +176,13 @@ public class MongoTasksServiceProvider implements TaskServiceProvider {
                 queryVals.put("Assignee", ctx.getSecurityContext().getUserPrincipal().getName());
                 queryPredicates = new Document(queryVals);
             } else {
-                // TODO: AND'd queries not yet working.
-                queryVals.put("TaskOwner", ctx.getSecurityContext().getUserPrincipal().getName());
-                queryVals.put("Assignee", ctx.getSecurityContext().getUserPrincipal().getName());
-                queryPredicates = new Document("$and", queryVals);
+                Document predOne = new Document("TaskOwner", ctx.getSecurityContext().getUserPrincipal().getName());
+                Document predTwo = new Document("Assignee", ctx.getSecurityContext().getUserPrincipal().getName());
+
+                BasicDBList queryClauses = new BasicDBList();
+                queryClauses .add(predOne);
+                queryClauses .add(predTwo);
+                queryPredicates = new Document("$or", queryClauses);
             }
 
             FindIterable result = tasksCollection.find(new Document(queryPredicates));

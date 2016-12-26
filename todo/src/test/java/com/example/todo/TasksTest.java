@@ -94,7 +94,6 @@ public class TasksTest {
         assertThat(updatedTask.getAssignedUserId()).isEqualTo(newTask.getAssignedUserId());
     }
 
-    /*
     @Test
     public void testGetOwnedTasks() {
 
@@ -194,7 +193,6 @@ public class TasksTest {
         deleteTask(taskTwo);
         deleteTask(taskThree);
     }
-    */
 
     private Task createTask(Task taskToCreate) {
         final Task newTask = client.target("http://localhost:" + RULE.getLocalPort() + "/tasks/")
