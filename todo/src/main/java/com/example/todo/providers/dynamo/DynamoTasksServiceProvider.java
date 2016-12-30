@@ -264,7 +264,7 @@ public class DynamoTasksServiceProvider implements TaskServiceProvider {
                         .withValueMap(new ValueMap()
                                 .withString(":user_id", userId));
                 items = assignedTasksIdx.query(spec);
-            } else {
+            } else if(queryType == TaskQueryType.OwnedTask) {
                 Index ownedTasksIdx = tasksTable.getIndex(OWNED_TASKS_IDX);
 
                 spec = new QuerySpec()
@@ -274,6 +274,16 @@ public class DynamoTasksServiceProvider implements TaskServiceProvider {
                         .withValueMap(new ValueMap()
                                 .withString(":user_id", userId));
                 items = ownedTasksIdx.query(spec);
+            } else {
+                Index assignedTasksIdx = tasksTable.getIndex(ASSIGNED_TASKS_IDX);
+
+                spec = new QuerySpec()
+                        .withProjectionExpression("Id, Title, Description, DueDate, Assignee, TaskOwner, TaskState, CreatedOn, LastUpdated")
+                        .withKeyConditionExpression("Assignee = :user_id OR TaskOwner = :user_id")
+                        .withFilterExpression("UserId = :user_id")
+                        .withValueMap(new ValueMap()
+                                .withString(":user_id", userId));
+                items = assignedTasksIdx.query(spec);
             }
 
             Iterator<Item> itr = items.iterator();
