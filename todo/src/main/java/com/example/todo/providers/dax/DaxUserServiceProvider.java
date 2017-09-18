@@ -1,41 +1,35 @@
-package com.example.todo.providers.dynamo;
+package com.example.todo.providers.dax;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.*;
 import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
-import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
-import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import com.example.todo.data.User;
 import com.example.todo.exceptions.NotFoundException;
 import com.example.todo.exceptions.ServiceException;
 import com.example.todo.providers.UserServiceProvider;
 import com.example.todo.util.ClientHelper;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Jeff on 11/12/16.
  */
-public class DynamoUserServiceProvider implements UserServiceProvider {
+public class DaxUserServiceProvider implements UserServiceProvider {
 
     private final String USER_TABLE_NAME = "Users";
     private DynamoDB m_dynamo = null;
-    private static final Logger LOGGER = LoggerFactory.getLogger(DynamoUserServiceProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DaxUserServiceProvider.class);
 
-    public DynamoUserServiceProvider() {
+    public DaxUserServiceProvider() {
 
         LOGGER.info("Creating Dynamo client");
 

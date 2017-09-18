@@ -5,6 +5,7 @@ import com.example.todo.data.User;
 import com.example.todo.exceptions.NotFoundException;
 import com.example.todo.exceptions.ServiceException;
 import com.example.todo.providers.UserServiceProvider;
+import com.example.todo.providers.dax.DaxUserServiceProvider;
 import com.example.todo.providers.dynamo.DynamoUserServiceProvider;
 import com.example.todo.providers.memory.MemUserServiceProvider;
 import com.example.todo.providers.mongo.MongoUserServiceProvider;
@@ -69,6 +70,10 @@ public class UserService {
             }
             case "dynamo": {
                 m_svcProvider = new DynamoUserServiceProvider();
+                break;
+            }
+            case "dax": {
+                m_svcProvider = new DaxUserServiceProvider();
                 break;
             }
             case "mongo": {

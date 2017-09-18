@@ -15,6 +15,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import java.util.*;
 
@@ -47,11 +48,12 @@ public class UserTest {
         ArrayList<String> userRoles = new ArrayList<String>();
         userRoles.add("admin");
         User testUser = new User("test", "test", "super_secret", userRoles);
-        client.target("http://localhost:" + RULE.getLocalPort() + "/user/")
+        Response r = client.target("http://localhost:" + RULE.getLocalPort() + "/user/")
                 .request()
                 .header(TestUtil.BASIC_AUTH_HEADER, TestUtil.BASIC_AUTH_VALUE)
-                .post(Entity.entity(testUser, MediaType.APPLICATION_JSON_TYPE))
-                .readEntity(User.class);
+                .post(Entity.entity(testUser, MediaType.APPLICATION_JSON_TYPE));
+
+        User u = r.readEntity(User.class);
     }
 
     @Test

@@ -46,7 +46,7 @@ public class ClientHelper {
     public AmazonDynamoDBClient getDynamoClient() {
 
         AmazonDynamoDBClient client = new AmazonDynamoDBClient(new ProfileCredentialsProvider());
-        client.setRegion(Region.getRegion(Regions.US_WEST_2));
+        client.setRegion(Region.getRegion(Regions.US_EAST_1));
 
         return client;
     }

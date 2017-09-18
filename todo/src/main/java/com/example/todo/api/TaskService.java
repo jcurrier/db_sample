@@ -7,12 +7,11 @@ import com.example.todo.exceptions.NotFoundException;
 import com.example.todo.exceptions.ServiceException;
 import com.example.todo.providers.TaskServiceProvider;
 import com.example.todo.providers.dynamo.DynamoTasksServiceProvider;
+import com.example.todo.providers.dax.DaxTasksServiceProvider;
 import com.example.todo.providers.memory.MemTaskServiceProvider;
 import com.example.todo.providers.mongo.MongoTasksServiceProvider;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Jeff on 11/14/16.
@@ -58,6 +57,10 @@ public class TaskService {
             }
             case "dynamo": {
                 m_svcProvider = new DynamoTasksServiceProvider();
+                break;
+            }
+            case "dax": {
+                m_svcProvider = new DaxTasksServiceProvider();
                 break;
             }
             case "mongo": {
