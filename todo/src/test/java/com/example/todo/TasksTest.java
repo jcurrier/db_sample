@@ -5,15 +5,13 @@ import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.eclipse.jetty.http.HttpStatus;
 import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,7 +142,7 @@ public class TasksTest {
         deleteTask(taskThree);
     }
 
-    // @Test
+    //@Test
     public void testGetAssignedTasks() {
 
         Task taskOne = new Task("Task One", "Owned Task Description", DateTime.now(),
@@ -158,11 +156,21 @@ public class TasksTest {
         taskTwo = createTask(taskTwo);
         taskThree = createTask(taskThree);
 
+        Response response = client.target("http://localhost:" + RULE.getLocalPort() + "/tasks/?type=assigned")
+                .request()
+                .header(TestUtil.BASIC_AUTH_HEADER, TestUtil.BASIC_AUTH_VALUE)
+                .get();
+
+        Task[] tasks =  response.readEntity(Task[].class);
+
+        /*
         Task[] tasks = client.target("http://localhost:" + RULE.getLocalPort() + "/tasks/?type=assigned")
                 .request()
                 .header(TestUtil.BASIC_AUTH_HEADER, TestUtil.BASIC_AUTH_VALUE)
                 .get()
                 .readEntity(Task[].class);
+        */
+        Assert.assertNotNull("Returned null Task object array", tasks);
 
         boolean foundTaskOne = false;
         boolean foundTaskTwo = false;

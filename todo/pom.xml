@@ -52,7 +52,7 @@
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-dax</artifactId>
-                <version>1.11.197</version>
+                <version>1.11.155</version>
             </dependency>
             <dependency>
                 <groupId>org.mongodb</groupId>
@@ -150,6 +150,13 @@
                     <artifactId>junit</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.amazon.dax</groupId>
+            <artifactId>com.amazon.dax</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/DaxJavaClient-1.0.841.27.jar</systemPath>
         </dependency>
     </dependencies>
 

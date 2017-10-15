@@ -81,7 +81,7 @@ public class UserService {
                 break;
             }
             default: {
-                //m_svcProvider = new MemUserServiceProvider();
+                m_svcProvider = new MemUserServiceProvider();
                 break;
             }
         }
