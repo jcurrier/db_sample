@@ -31,12 +31,8 @@ public class DaxUserServiceProvider implements UserServiceProvider {
 
     public DaxUserServiceProvider() {
 
-        LOGGER.info("Creating Dynamo client");
-
-        // This client will default to US West (Oregon)
-
-        AmazonDynamoDBClient client = ClientHelper.instance().getDynamoClient();
-        m_dynamo = new DynamoDB(client);
+        LOGGER.info("Creating DAX client");
+        m_dynamo = new DynamoDB(ClientHelper.instance().getDAXClient());
     }
 
     @Override

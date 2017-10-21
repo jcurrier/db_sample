@@ -3,7 +3,7 @@
 #defaultName: ${DW_DEFAULT_NAME:-Stranger}
 
 #store: mongo
-store: memory 
+store: dynamo
 
 # use the simple server factory if you only want to run on a single port
 #server:
@@ -18,12 +18,12 @@ server:
   applicationConnectors:
     - type: http
       port: 8080
-    - type: https
-      port: 8443
-      keyStorePath: example.keystore
-      keyStorePassword: example
-      validateCerts: false
-      validatePeers: false
+    # - type: https
+    #  port: 8443
+    #  keyStorePath: example.keystore
+    #  keyStorePassword: example
+    #  validateCerts: false
+    #  validatePeers: false
     #this requires the alpn-boot library on the JVM's boot classpath
     #- type: h2
     #  port: 8445
@@ -34,12 +34,12 @@ server:
   adminConnectors:
     - type: http
       port: 8081
-    - type: https
-      port: 8444
-      keyStorePath: example.keystore
-      keyStorePassword: example
-      validateCerts: false
-      validatePeers: false
+    # - type: https
+    #  port: 8444
+    #  keyStorePath: example.keystore
+    #  keyStorePassword: example
+     # validateCerts: false
+    #  validatePeers: false
 
 # Logging settings.
 logging:

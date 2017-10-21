@@ -1,4 +1,4 @@
-store: memory
+store: dynamo
 
 server:
   applicationConnectors:

@@ -21,6 +21,8 @@ import com.example.todo.providers.TaskServiceProvider;
 import com.example.todo.util.ClientHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,13 +37,11 @@ public class DynamoTasksServiceProvider implements TaskServiceProvider {
     private final String ASSIGNED_TASKS_IDX = "Assignee-TaskState-index";
     private final String OWNED_TASKS_IDX = "TaskOwner-TaskState-index";
     private DynamoDB m_dynamo = null;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamoUserServiceProvider.class);
 
     public DynamoTasksServiceProvider() {
-
-        // This client will default to US West (Oregon)
+        LOGGER.info("Creating DDB client");
         AmazonDynamoDBClient client = ClientHelper.instance().getDynamoClient();
-        //AmazonDynamoDBClient client = new AmazonDynamoDBClient(new ProfileCredentialsProvider());
-        // client.setRegion(Region.getRegion(Regions.US_WEST_2));
         m_dynamo = new DynamoDB(client);
     }
 

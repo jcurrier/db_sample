@@ -14,9 +14,12 @@ import com.example.todo.data.Task;
 import com.example.todo.exceptions.NotFoundException;
 import com.example.todo.exceptions.ServiceException;
 import com.example.todo.providers.TaskServiceProvider;
+import com.example.todo.providers.dynamo.DynamoUserServiceProvider;
 import com.example.todo.util.ClientHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,14 +34,11 @@ public class DaxTasksServiceProvider implements TaskServiceProvider {
     private final String ASSIGNED_TASKS_IDX = "Assignee-TaskState-index";
     private final String OWNED_TASKS_IDX = "TaskOwner-TaskState-index";
     private DynamoDB m_dynamo = null;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DaxTasksServiceProvider.class);
 
     public DaxTasksServiceProvider() {
-
-        // This client will default to US West (Oregon)
-        AmazonDynamoDBClient client = ClientHelper.instance().getDynamoClient();
-        //AmazonDynamoDBClient client = new AmazonDynamoDBClient(new ProfileCredentialsProvider());
-        // client.setRegion(Region.getRegion(Regions.US_WEST_2));
-        m_dynamo = new DynamoDB(client);
+        LOGGER.info("Creating DAX client.");
+        m_dynamo = new DynamoDB(ClientHelper.instance().getDAXClient());
     }
 
     @Override

@@ -38,9 +38,6 @@ public class DynamoUserServiceProvider implements UserServiceProvider {
     public DynamoUserServiceProvider() {
 
         LOGGER.info("Creating Dynamo client");
-
-        // This client will default to US West (Oregon)
-
         AmazonDynamoDBClient client = ClientHelper.instance().getDynamoClient();
         m_dynamo = new DynamoDB(client);
     }

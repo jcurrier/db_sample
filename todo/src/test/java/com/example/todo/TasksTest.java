@@ -92,7 +92,7 @@ public class TasksTest {
         assertThat(updatedTask.getAssignedUserId()).isEqualTo(newTask.getAssignedUserId());
     }
 
-    // @Test
+    @Test
     public void testGetOwnedTasks() {
 
         Task taskOne = new Task("Task One", "Owned Task Description", DateTime.now(),
@@ -142,7 +142,7 @@ public class TasksTest {
         deleteTask(taskThree);
     }
 
-    //@Test
+    @Test
     public void testGetAssignedTasks() {
 
         Task taskOne = new Task("Task One", "Owned Task Description", DateTime.now(),
@@ -161,15 +161,11 @@ public class TasksTest {
                 .header(TestUtil.BASIC_AUTH_HEADER, TestUtil.BASIC_AUTH_VALUE)
                 .get();
 
-        Task[] tasks =  response.readEntity(Task[].class);
-
-        /*
         Task[] tasks = client.target("http://localhost:" + RULE.getLocalPort() + "/tasks/?type=assigned")
                 .request()
                 .header(TestUtil.BASIC_AUTH_HEADER, TestUtil.BASIC_AUTH_VALUE)
                 .get()
                 .readEntity(Task[].class);
-        */
         Assert.assertNotNull("Returned null Task object array", tasks);
 
         boolean foundTaskOne = false;
@@ -245,6 +241,8 @@ public class TasksTest {
                 .header(TestUtil.BASIC_AUTH_HEADER, TestUtil.BASIC_AUTH_VALUE)
                 .get()
                 .getStatus();
+
+        Assert.assertEquals(stat, HttpStatus.OK_200);
 
         final Task task = client.target("http://localhost:" + RULE.getLocalPort() + "/tasks/" + taskId)
                 .request()
