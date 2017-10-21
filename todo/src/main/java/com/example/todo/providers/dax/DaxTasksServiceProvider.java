@@ -36,9 +36,10 @@ public class DaxTasksServiceProvider implements TaskServiceProvider {
     private DynamoDB m_dynamo = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(DaxTasksServiceProvider.class);
 
-    public DaxTasksServiceProvider() {
+    public DaxTasksServiceProvider(String clusterUrl) {
         LOGGER.info("Creating DAX client.");
-        m_dynamo = new DynamoDB(ClientHelper.instance().getDAXClient());
+        LOGGER.info("DAX Cluster = " + clusterUrl);
+        m_dynamo = new DynamoDB(ClientHelper.instance().getDAXClient(clusterUrl));
     }
 
     @Override

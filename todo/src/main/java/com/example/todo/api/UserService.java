@@ -73,7 +73,7 @@ public class UserService {
                 break;
             }
             case "dax": {
-                m_svcProvider = new DaxUserServiceProvider();
+                m_svcProvider = new DaxUserServiceProvider(m_config.getDaxCluster());
                 break;
             }
             case "mongo": {

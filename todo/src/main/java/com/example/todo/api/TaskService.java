@@ -60,7 +60,8 @@ public class TaskService {
                 break;
             }
             case "dax": {
-                m_svcProvider = new DaxTasksServiceProvider();
+                String clusterUrl = m_config.getDaxCluster();
+                m_svcProvider = new DaxTasksServiceProvider(clusterUrl);
                 break;
             }
             case "mongo": {

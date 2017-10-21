@@ -55,9 +55,9 @@ public class ClientHelper {
         return client;
     }
 
-    public AmazonDynamoDB getDAXClient() {
+    public AmazonDynamoDB getDAXClient(String clusterUrl) {
         ClientConfig daxConfig = new ClientConfig()
-                .withEndpoints("devcluster.vrnjkd.clustercfg.dax.use1.cache.amazonaws.com:8111");
+                .withEndpoints(clusterUrl);
         AmazonDaxClient client = new ClusterDaxClient(daxConfig);
 
         return client;

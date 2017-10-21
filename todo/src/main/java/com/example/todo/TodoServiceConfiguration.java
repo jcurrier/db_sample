@@ -15,6 +15,9 @@ public class TodoServiceConfiguration extends Configuration {
     @NotEmpty
     private String m_storageProvider = "";
 
+    @NotEmpty
+    private String m_daxClusterUrl= "";
+
     @JsonProperty("store")
     public String getStore() {
         return m_storageProvider;
@@ -23,6 +26,16 @@ public class TodoServiceConfiguration extends Configuration {
     @JsonProperty("store")
     public void setStore(String provider) {
         this.m_storageProvider = provider;
+    }
+
+    @JsonProperty("daxCluster")
+    public String getDaxCluster() {
+        return m_daxClusterUrl;
+    }
+
+    @JsonProperty("daxCluster")
+    public void setDaxCluster(String clusterName) {
+        this.m_daxClusterUrl = clusterName;
     }
 }
 
