@@ -1,5 +1,7 @@
 store: dynamo
 
+daxCluster: devcluster.vrnjkd.clustercfg.dax.use1.cache.amazonaws.com:8111
+
 server:
   applicationConnectors:
     - type: http

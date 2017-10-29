@@ -5,6 +5,8 @@
 #store: mongo
 store: dynamo
 
+daxCluster: devcluster.vrnjkd.clustercfg.dax.use1.cache.amazonaws.com:8111
+
 # use the simple server factory if you only want to run on a single port
 #server:
 #  type: simple
