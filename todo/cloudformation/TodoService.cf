@@ -1,0 +1,80 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+
+  "Description": "Tables needed for TodoService",
+
+  "Parameters": {
+    "ReadCapacityUnits": {
+      "Description": "Provisioned read throughput",
+      "Type": "Number",
+      "Default": "5",
+      "MinValue": "5",
+      "MaxValue": "10000",
+      "ConstraintDescription": "must be between 5 and 10000"
+    },
+
+    "WriteCapacityUnits": {
+      "Description": "Provisioned write throughput",
+      "Type": "Number",
+      "Default": "10",
+      "MinValue": "5",
+      "MaxValue": "10000",
+      "ConstraintDescription": "must be between 5 and 10000"
+    }
+  },
+
+  "Resources": {
+    "Users": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          { "AttributeName": "id", "AttributeType": "S" },
+          { "AttributeName": "UserId", "AttributeType": "S" }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": { "Ref": "ReadCapacityUnits" },
+          "WriteCapacityUnits": { "Ref": "WriteCapacityUnits" }
+        },
+        "KeySchema": [
+          { "AttributeName": "id", "KeyType": "HASH" },
+          { "AttributeName": "UserId", "KeyType": "RANGE" }
+        ],
+        "TableName": "Users"
+      }
+    },
+    "Tasks": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          { "AttributeName": "Id", "AttributeType": "S" },
+          { "AttributeName": "UserId", "AttributeType": "S" },
+          { "AttributeName": "Assignee", "AttributeType": "S" },
+          { "AttributeName": "TaskState", "AttributeType": "S" }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": { "Ref": "ReadCapacityUnits" },
+          "WriteCapacityUnits": { "Ref": "WriteCapacityUnits" }
+        },
+        "KeySchema": [
+          { "AttributeName": "UserId", "KeyType": "HASH" },
+          { "AttributeName": "Id", "KeyType": "RANGE" }
+        ],
+        "TableName": "Tasks",
+        "GlobalSecondaryIndexes": [ {
+          "IndexName": "Assignee-TaskState-index",
+          "KeySchema": [
+            { "AttributeName": "Assignee", "KeyType": "HASH" },
+            { "AttributeName": "TaskState", "KeyType": "RANGE" }
+          ],
+          "Projection": {
+            "ProjectionType": "KEYS_ONLY"
+          },
+          "ProvisionedThroughput": {
+            "ReadCapacityUnits": { "Ref": "ReadCapacityUnits" },
+            "WriteCapacityUnits": { "Ref": "WriteCapacityUnits" }
+          }
+        } ]
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 package com.example.todo.util;
 
 import com.amazon.dax.client.dynamodbv2.AmazonDaxClient;
+import com.amazon.dax.client.dynamodbv2.AmazonDaxClientBuilder;
 import com.amazon.dax.client.dynamodbv2.ClientConfig;
 import com.amazon.dax.client.dynamodbv2.ClusterDaxClient;
 import com.amazonaws.auth.AWSCredentials;
@@ -10,6 +11,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDB;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
 import com.amazonaws.services.securitytoken.model.AssumeRoleRequest;
 import com.amazonaws.services.securitytoken.model.AssumeRoleResult;
@@ -56,10 +58,17 @@ public class ClientHelper {
     }
 
     public AmazonDynamoDB getDAXClient(String clusterUrl) {
+
+        AmazonDaxClientBuilder daxClientBuilder = AmazonDaxClientBuilder.standard();
+        daxClientBuilder.withRegion(Regions.US_EAST_1).withEndpointConfiguration(clusterUrl);
+        AmazonDynamoDB client = daxClientBuilder.build();
+
+        return client;
+        /*
         ClientConfig daxConfig = new ClientConfig()
                 .withEndpoints(clusterUrl);
         AmazonDaxClient client = new ClusterDaxClient(daxConfig);
-
         return client;
+        */
     }
 }

@@ -33,7 +33,15 @@ public class DaxUserServiceProvider implements UserServiceProvider {
 
         LOGGER.info("Creating DAX client");
         LOGGER.info("DAX Cluster = " + clusterUrl);
-        m_dynamo = new DynamoDB(ClientHelper.instance().getDAXClient(clusterUrl));
+        try {
+
+            LOGGER.info("Creating DAX client");
+            m_dynamo = new DynamoDB(ClientHelper.instance().getDAXClient(clusterUrl));
+            LOGGER.info("DAX client created!");
+
+        }catch (Exception ex) {
+            LOGGER.error("Caught exception creating DAX Client", ex);
+        }
     }
 
     @Override
